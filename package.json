@@ -1,0 +1,31 @@
+{
+  "name": "forkify-app",
+  "version": "1.0.0",
+  "description": "food recipe app",
+  "scripts": {
+    "start": "parcel index.html",
+    "build": "parcel build index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/protickr/forkify-app.git"
+  },
+  "keywords": [
+    "javascript",
+    "api",
+    "sass",
+    "parcel"
+  ],
+  "author": "Protick Roy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/protickr/forkify-app/issues"
+  },
+  "homepage": "https://github.com/protickr/forkify-app#readme",
+  "devDependencies": {
+    "@parcel/transformer-sass": "^2.6.2",
+    "parcel": "^2.6.2",
+    "sass": "^1.53.0"
+  },
+  "dependencies": {}
+}
