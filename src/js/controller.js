@@ -1,18 +1,22 @@
 import * as model from './model.js';
 import recipeView from './views/recipeView.js';
+import searchView from './views/searchView.js';
+import resultsView from './views/resultsView.js';
 
 
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 
 ///////////////////////////////////////
+if(module.hot){
+  module.hot.accept();
+}
 
 const controlRecipes = async function () {
   try {
     let id = window.location.hash.slice(1);
     if (!id) return;
 
-    // 
     recipeView.renderSpinner();
 
     // 1) Loading recipe
@@ -27,8 +31,28 @@ const controlRecipes = async function () {
   }
 };
 
-const init = function (){
+const controlSearchResults = async function () {
+  try {
+    // 1) get search query from view
+    const query = searchView.getQuery();
+    if(!query) return;
+
+    resultsView.renderSpinner();
+    
+    // 2) load search results from model
+    await model.loadSearchResult(query);
+
+    // 3) render search results by view
+    resultsView.render(model.state.search.results);
+  } catch (error) {
+    console.error(`${error} 💥💥💥`);
+    resultsView.renderErrorMessage();
+  }
+};
+
+const init = function () {
   recipeView.addHandlerRender(controlRecipes);
+  searchView.addHandlerSearch(controlSearchResults);
 };
 
 init();
