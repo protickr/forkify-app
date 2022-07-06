@@ -1,8 +1,9 @@
 import * as model from './model.js';
+import bookmarksView from './views/bookmarksView.js';
 import recipeView from './views/recipeView.js';
-import searchView from './views/searchView.js';
 import resultsView from './views/resultsView.js';
 import paginationView from './views/paginationView.js';
+import searchView from './views/searchView.js';
 
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
@@ -14,6 +15,9 @@ const controlRecipes = async function () {
     if (!id) return;
 
     recipeView.renderSpinner();
+
+    // -1) mark bookmark as active if it is the current recipe in the recipeView
+    bookmarksView.update(model.state.bookmarks);
 
     // 0) mark selected result as active before rendering the recipe
     resultsView.update(model.getSearchResultsPage());
@@ -68,7 +72,21 @@ const controlServings = function (newServings){
   recipeView.update(model.state.recipe);
 };
 
+const controlAddBookmark = function () {
+  // add or delete bookmark
+  !model.state.recipe.bookmarked
+    ? model.addBookMark(model.state.recipe)
+    : model.deleteBookmark(model.state.recipe.id);
+
+  // update recipe view
+  recipeView.update(model.state.recipe);
+
+  // render bookmarks
+  bookmarksView.render(model.state.bookmarks);
+};
+
 const init = function () {
+  recipeView.addHandlerAddBookmark(controlAddBookmark);
   recipeView.addHandlerRender(controlRecipes);
   recipeView.addHanlderUpdateServings(controlServings);
   searchView.addHandlerSearch(controlSearchResults);
